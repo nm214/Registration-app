@@ -1,16 +1,47 @@
-import React from "react";
-import styles from "../components/SessionTimeoutModal.module.css";
+"use client";
 
-interface SessionTimeoutModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import React, { useEffect, useRef, useState } from "react";
+import styles from "./SessionTimeoutModal.module.css";
 
-const SessionTimeoutModal: React.FC<SessionTimeoutModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  if (!isOpen) return null;
+const SessionTimeoutModal = ({ timeout = 300 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timeLeftRef = useRef<number>(timeout);
+
+  const resetTimer = () => {
+    timeLeftRef.current = timeout;
+    if (timerRef.current) clearInterval(timerRef.current);
+    startTimer();
+  };
+
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      timeLeftRef.current -= 1;
+      if (timeLeftRef.current <= 0) {
+        setIsModalOpen(true);
+        if (timerRef.current) clearInterval(timerRef.current);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const events = ["mousemove", "keydown", "click"];
+    events.forEach((event) => window.addEventListener(event, resetTimer));
+
+    startTimer();
+
+    return () => {
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    resetTimer();
+  };
+
+  if (!isModalOpen) return null;
 
   return (
     <div className={styles.sessionModalOverlay}>
@@ -19,7 +50,7 @@ const SessionTimeoutModal: React.FC<SessionTimeoutModalProps> = ({
         <p className={styles.sessionModalMessage}>
           Your session has expired due to inactivity.
         </p>
-        <button onClick={onClose} className={styles.sessionModalButton}>
+        <button onClick={handleClose} className={styles.sessionModalButton}>
           Restart Session
         </button>
       </div>
