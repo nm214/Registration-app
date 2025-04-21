@@ -35,9 +35,7 @@ export default function RegisterPage() {
   ) => {
     const { name, value } = e.target;
     dispatch(updateForm({ [name]: value }));
-    if (name === "email") {
-      setError((prev) => ({ ...prev, email: "" }));
-    }
+    setError((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleNext = () => {
