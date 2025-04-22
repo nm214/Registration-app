@@ -13,3 +13,8 @@ body {
 main {
   flex: 1;
 }
+
+body {
+  background-image: url('https://www.transparenttextures.com/patterns/white-wall.png');
+    background-color: #f0f0f0;
+  }

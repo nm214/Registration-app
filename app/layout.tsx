@@ -7,6 +7,8 @@ import Providers from "@/store/Providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SessionTimeoutModal from "@/components/SessionTimeoutModal";
+import Spinner from "@/components/Spinner";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +33,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <SessionTimeoutModal />
+          <Spinner />
           <main>{children}</main>
           <Footer />
         </Providers>

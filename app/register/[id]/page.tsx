@@ -1,5 +1,5 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { resetForm, updateForm } from "../../../store/formSlice";
@@ -12,6 +12,10 @@ import Modal from "@/components/Modal";
 export default function RegisterPage() {
   const { id } = useParams();
   const router = useRouter();
+
+  if (Number(id) < 1 || Number(id) > 3 || isNaN(Number(id))) {
+    notFound();
+  }
 
   const formData = useSelector((state: RootState) => state.form);
   const dispatch = useDispatch();
@@ -276,7 +280,9 @@ export default function RegisterPage() {
                   </button>
                 ))}
               </div>
-              {error.agenda && <p className={styles.error}>{error.agenda}</p>}
+              {error.agenda && (
+                <p className={styles.agendaError}>{error.agenda}</p>
+              )}
             </>
           )}
 
@@ -324,7 +330,7 @@ export default function RegisterPage() {
                 onChange={handleChange}
               ></textarea>
               <button
-                className={styles.button}
+                className={styles.submitButton}
                 type="button"
                 onClick={handleSubmit}
               >
