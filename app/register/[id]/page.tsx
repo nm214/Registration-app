@@ -117,6 +117,19 @@ export default function RegisterPage() {
     { id: "backend", title: "Backend Development" },
     { id: "devops", title: "DevOps & Deployment" },
     { id: "design", title: "UI/UX Design" },
+    { id: "ai", title: "Artificial Intelligence" },
+    { id: "cloud", title: "Cloud Computing" },
+    { id: "web3", title: "Web3 & Blockchain" },
+    { id: "iot", title: "Internet of Things" },
+    { id: "cybersecurity", title: "Cybersecurity" },
+    { id: "mlops", title: "MLOps" },
+    { id: "robotics", title: "Robotics" },
+    { id: "quantum", title: "Quantum Computing" },
+    { id: "arvr", title: "AR/VR & Mixed Reality" },
+    { id: "sustainability", title: "Tech for Sustainability" },
+    { id: "mobile", title: "Mobile Development" },
+    { id: "data", title: "Data Science & Analytics" },
+    { id: "leadership", title: "Leadership & Innovation" },
   ];
 
   const toggleAgenda = (id: string) => {
@@ -348,7 +361,13 @@ export default function RegisterPage() {
               </p>
 
               <p>
-                <strong>Agenda:</strong> {formData.agenda.join(", ")}
+                <strong>Agenda:</strong>{" "}
+                {formData.agenda
+                  .map((id) => {
+                    const match = agendaOptions.find((item) => item.id === id);
+                    return match ? match.title : id;
+                  })
+                  .join(", ")}
               </p>
               <p>
                 <strong>What are you hoping to learn?:</strong>
