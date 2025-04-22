@@ -131,6 +131,37 @@ export default function RegisterPage() {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    const missingFields: string[] = [];
+    const requiredFields: { name: keyof typeof formData; label: string }[] = [
+      { name: "name", label: "Name" },
+      { name: "email", label: "Email" },
+      { name: "phone", label: "Phone Number" },
+      { name: "company", label: "Company" },
+      { name: "role", label: "Role" },
+      { name: "location", label: "Location" },
+      { name: "agenda", label: "Agenda" },
+    ];
+
+    requiredFields.forEach((field) => {
+      if (
+        !formData[field.name] ||
+        (Array.isArray(formData[field.name]) &&
+          formData[field.name].length === 0)
+      ) {
+        missingFields.push(field.label);
+      }
+    });
+
+    if (missingFields.length > 0) {
+      const missingFieldsList = missingFields.join(", ");
+      setModalMessage(
+        `Please fill in the following fields: ${missingFieldsList}`
+      );
+      setIsModalOpen(true);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       await addDoc(collection(db, "registrations"), formData);
       dispatch(resetForm());
