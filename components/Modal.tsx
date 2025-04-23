@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Modal.module.css";
+import { Button, Typography } from "@mui/material";
 
 interface ModalProps {
   message: string;
@@ -10,10 +11,14 @@ const Modal: React.FC<ModalProps> = ({ message, onClose }) => {
   return (
     <div className={styles.modaloverlay} onClick={onClose}>
       <div className={styles.modalcontent} onClick={(e) => e.stopPropagation()}>
-        <h3>{message}</h3>
-        <button className={styles.button} onClick={onClose}>
-          Close
-        </button>
+        <div className={styles.modalcontentAlignment}>
+          <Typography variant="h5" fontWeight={600}>
+            {message}
+          </Typography>
+          <Button size="small" className={styles.button} onClick={onClose}>
+            Close
+          </Button>
+        </div>
       </div>
     </div>
   );

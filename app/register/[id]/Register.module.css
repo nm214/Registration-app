@@ -22,13 +22,12 @@
 }
 
 .label {
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.2rem;
   display: block;
+  font-weight: 550 !important;
+  color: #333 !important;
 }
 
-.input,
 .textarea {
   margin: 2px 0 15px 0;
   padding: 0.75rem 1rem;
@@ -39,7 +38,6 @@
   transition: border-color 0.2s;
 }
 
-.input:focus,
 .textarea:focus {
   border-color: #0070f3;
   outline: none;
@@ -49,34 +47,18 @@
 .button {
   padding: 0.75rem 1.5rem;
   width: 48%;
-  background-color: #0070f3;
-  color: white;
   font-size: 1rem;
-  font-weight: 500;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  border-radius: 8px !important;
 }
 
 .submitButton {
-  padding: 0.75rem 1.5rem;
-  background-color: #0070f3;
-  color: white;
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: block;
+  padding: 0.5rem !important;
+  border-radius: 8px !important;
+  transition: background-color 0.2s !important;
+  display: block !important;
   width: 48%;
-  margin: 1.5rem auto 0 auto;
-}
-
-.button:hover,
-.submitButton:hover {
-  background-color: #0056b3;
+  margin: 1.5rem auto 0 auto !important;
 }
 
 .buttonsContainer {
@@ -91,17 +73,11 @@
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 0.75rem;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .agendaButton {
-  padding: 0.6rem 1rem;
-  background-color: #f1f1f1;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  border-radius: 10px !important;
 }
 
 .agendaButton:hover {
@@ -122,10 +98,7 @@
 }
 
 .summaryTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #222;
+  margin-bottom: 1rem !important;
 }
 
 .error {
@@ -134,26 +107,15 @@
   margin-top: -0.8rem;
 }
 
-.agendaError {
-  color: #e63946;
-  font-size: 0.875rem;
-}
-
 .summary {
-  width: 98%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: #fafafa;
-  transition: border-color 0.2s;
-  margin: -10px 0 20px 0;
+  border-radius: 8px !important;
+  background-color: #fafafa !important;
 }
 
-.summary:focus {
-  border-color: #0070f3;
-  outline: none;
-  background-color: #fff;
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 @media (max-width: 600px) {

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { db } from "@/app/firebase/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import Modal from "@/components/Modal";
+import { TextField, Button, Typography } from "@mui/material";
 
 export default function RegisterPage() {
   const { id } = useParams();
@@ -229,185 +230,203 @@ export default function RegisterPage() {
         <div className={styles.formSection}>
           {id === "1" && (
             <>
-              <label className={styles.label} htmlFor="name">
-                Name:
-              </label>
-              <input
-                className={styles.input}
-                type="text"
+              <TextField
+                label="Name"
+                variant="outlined"
+                fullWidth
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                error={!!error.name}
+                helperText={error.name}
+                margin="normal"
               />
-              {error.name && <p className={styles.error}>{error.name}</p>}
-              <label className={styles.label} htmlFor="email">
-                Email:
-              </label>
-              <input
-                className={styles.input}
-                type="email"
+
+              <TextField
+                label="Email"
+                variant="outlined"
+                fullWidth
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                error={!!error.email}
+                helperText={error.email}
+                margin="normal"
               />
-              {error.email && <p className={styles.error}>{error.email}</p>}
-              <label className={styles.label} htmlFor="phone">
-                Phone Number:
-              </label>
-              <input
-                className={styles.input}
-                type="tel"
+
+              <TextField
+                label="Phone Number"
+                variant="outlined"
+                fullWidth
                 id="phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                error={!!error.phone}
+                helperText={error.phone}
+                margin="normal"
               />
-              {error.phone && <p className={styles.error}>{error.phone}</p>}
-              <label className={styles.label} htmlFor="company">
-                Company:
-              </label>
-              <input
-                className={styles.input}
-                type="text"
+
+              <TextField
+                label="Company"
+                variant="outlined"
+                fullWidth
                 id="company"
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
+                error={!!error.company}
+                helperText={error.company}
+                margin="normal"
               />
-              {error.company && <p className={styles.error}>{error.company}</p>}
-              <label className={styles.label} htmlFor="role">
-                Role:
-              </label>
-              <input
-                className={styles.input}
-                type="text"
+
+              <TextField
+                label="Role"
+                variant="outlined"
+                fullWidth
                 id="role"
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
+                error={!!error.role}
+                helperText={error.role}
+                margin="normal"
               />
-              {error.role && <p className={styles.error}>{error.role}</p>}
 
-              <label className={styles.label} htmlFor="location">
-                Location:
-              </label>
-              <input
-                className={styles.input}
-                type="text"
+              <TextField
+                label="Location"
+                variant="outlined"
+                fullWidth
                 id="location"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
+                error={!!error.location}
+                helperText={error.location}
+                margin="normal"
               />
-              {error.location && (
-                <p className={styles.error}>{error.location}</p>
-              )}
             </>
           )}
 
           {id === "2" && (
             <>
-              <p className={styles.label}>Select Agenda Items:</p>
+              <Typography className={styles.label}>
+                Select Agenda Items:
+              </Typography>
+
               <div className={styles.agendaGrid}>
                 {agendaOptions.map((item) => (
-                  <button
+                  <Button
+                    className={styles.agendaButton}
                     key={item.id}
-                    type="button"
-                    className={`${styles.agendaButton} ${
-                      agenda.includes(item.id) ? styles.selected : ""
-                    }`}
+                    variant={
+                      agenda.includes(item.id) ? "contained" : "outlined"
+                    }
+                    color={agenda.includes(item.id) ? "primary" : "info"}
                     onClick={() => toggleAgenda(item.id)}
                   >
                     {item.title}
-                  </button>
+                  </Button>
                 ))}
               </div>
               {error.agenda && (
-                <p className={styles.agendaError}>{error.agenda}</p>
+                <Typography variant="body2" color="error">
+                  {error.agenda}
+                </Typography>
               )}
             </>
           )}
 
           {id === "3" && (
             <div className={styles.summaryBox}>
-              <h2 className={styles.summaryTitle}>Review Your Info:</h2>
-              <p>
-                {" "}
-                <strong>Name: </strong>
-                {formData.name}
-              </p>
-              <p>
-                {" "}
-                <strong>Email:</strong> {formData.email}
-              </p>
+              <Typography
+                variant="h5"
+                fontSize={"1.25rem"}
+                fontWeight={"800"}
+                color="#222"
+                className={styles.summaryTitle}
+              >
+                Review Your Info:
+              </Typography>
+              <div className={styles.infoBox}>
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Name:</strong> {formData.name}
+                </Typography>
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Email:</strong> {formData.email}
+                </Typography>
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Phone Number:</strong> {formData.phone}
+                </Typography>
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Company:</strong> {formData.company}
+                </Typography>
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Role:</strong> {formData.role}
+                </Typography>
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Location:</strong> {formData.location}
+                </Typography>
 
-              <p>
-                {" "}
-                <strong>Phone Number:</strong> {formData.phone}
-              </p>
-              <p>
-                {" "}
-                <strong>Company:</strong> {formData.company}
-              </p>
-              <p>
-                {" "}
-                <strong>Role:</strong> {formData.role}
-              </p>
-              <p>
-                {" "}
-                <strong>Location:</strong> {formData.location}
-              </p>
-
-              <p>
-                <strong>Agenda:</strong>{" "}
-                {formData.agenda
-                  .map((id) => {
-                    const match = agendaOptions.find((item) => item.id === id);
-                    return match ? match.title : id;
-                  })
-                  .join(", ")}
-              </p>
-              <p>
-                <strong>What are you hoping to learn?:</strong>
-              </p>
-              <textarea
-                id="summary"
-                name="summary"
-                className={styles.summary}
-                value={formData.summary}
-                onChange={handleChange}
-              ></textarea>
-              <button
+                <Typography variant="inherit" gutterBottom>
+                  <strong>Agenda:</strong>
+                  {formData.agenda
+                    .map((id) => {
+                      const match = agendaOptions.find(
+                        (item) => item.id === id
+                      );
+                      return match ? match.title : id;
+                    })
+                    .join(", ")}
+                </Typography>
+                <TextField
+                  label="What are you hoping to learn?:"
+                  name="summary"
+                  value={formData.summary}
+                  variant="outlined"
+                  fullWidth
+                  id="summary"
+                  onChange={handleChange}
+                  margin="normal"
+                  multiline
+                  rows={4}
+                  className={styles.summary}
+                />
+              </div>
+              <Button
+                color="primary"
+                variant="contained"
                 className={styles.submitButton}
-                type="button"
                 onClick={handleSubmit}
               >
                 {isLoading ? "Submitting..." : "Submit"}
-              </button>
+              </Button>
             </div>
           )}
         </div>
 
         <div className={styles.buttonsContainer}>
           {id !== "1" && (
-            <button
+            <Button
+              color="primary"
+              variant="contained"
               className={styles.button}
-              type="button"
               onClick={handlePrevious}
             >
               Previous
-            </button>
+            </Button>
           )}
           {id !== "3" && (
-            <button
+            <Button
+              color="primary"
+              variant="contained"
               className={styles.button}
-              type="button"
               onClick={handleNext}
             >
               Next
-            </button>
+            </Button>
           )}
         </div>
       </form>

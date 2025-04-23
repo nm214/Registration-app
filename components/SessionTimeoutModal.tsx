@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./SessionTimeoutModal.module.css";
+import { Button, Typography } from "@mui/material";
 
 const SessionTimeoutModal = ({ timeout = 300 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,13 +47,31 @@ const SessionTimeoutModal = ({ timeout = 300 }) => {
   return (
     <div className={styles.sessionModalOverlay}>
       <div className={styles.sessionModalContent}>
-        <h2 className={styles.sessionModalTitle}>Session Timeout</h2>
-        <p className={styles.sessionModalMessage}>
+        <Typography
+          variant="h2"
+          fontSize={"20px"}
+          fontWeight={"bold"}
+          color="#333"
+        >
+          Session Timeout
+        </Typography>
+        <Typography
+          variant="h2"
+          fontSize={"16px"}
+          color="#555"
+          marginTop={"30px"}
+          marginBottom={"30px"}
+        >
           Your session has expired due to inactivity.
-        </p>
-        <button onClick={handleClose} className={styles.sessionModalButton}>
+        </Typography>
+        <Button
+          color="primary"
+          variant="contained"
+          className={styles.sessionModalButton}
+          onClick={handleClose}
+        >
           Restart Session
-        </button>
+        </Button>
       </div>
     </div>
   );

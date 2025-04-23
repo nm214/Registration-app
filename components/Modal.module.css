@@ -11,7 +11,7 @@
   align-items: center;
   z-index: 1000;
 }
- 
+
 .modalcontent {
   background: #ffffff;
   border-radius: 16px;
@@ -22,29 +22,24 @@
   animation: fadeIn 0.3s ease-out;
   position: relative;
 }
- 
-.modalcontent h3 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 24px;
+
+.modalcontentAlignment {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
- 
+
 .button {
   background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  color: white !important;
+  padding: 8px 20px !important;
+  border-radius: 8px !important;
 }
- 
+
 .button:hover {
-  background: linear-gradient(135deg, #0056b3, #003e80);
   transform: scale(1.05);
 }
- 
+
 @keyframes fadeIn {
   from {
     opacity: 0;
