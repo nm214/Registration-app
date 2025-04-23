@@ -5,10 +5,11 @@ import { RootState } from "../../../store";
 import { resetForm, updateForm } from "../../../store/formSlice";
 import styles from "./Register.module.css";
 import { useState } from "react";
-import { db } from "@/app/firebase/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+// import { db } from "@/app/firebase/firebaseConfig";
+// import { collection, addDoc } from "firebase/firestore";
 import Modal from "@/components/Modal";
 import { TextField, Button, Typography } from "@mui/material";
+import { submitForm } from "../../../lib/api";
 
 export default function RegisterPage() {
   const { id } = useParams();
@@ -143,6 +144,55 @@ export default function RegisterPage() {
     setError((prev) => ({ ...prev, agenda: "" }));
   };
 
+  // const handleSubmit = async () => {
+  //   setIsLoading(true);
+  //   const missingFields: string[] = [];
+  //   const requiredFields: { name: keyof typeof formData; label: string }[] = [
+  //     { name: "name", label: "Name" },
+  //     { name: "email", label: "Email" },
+  //     { name: "phone", label: "Phone Number" },
+  //     { name: "company", label: "Company" },
+  //     { name: "role", label: "Role" },
+  //     { name: "location", label: "Location" },
+  //     { name: "agenda", label: "Agenda" },
+  //   ];
+
+  //   requiredFields.forEach((field) => {
+  //     if (
+  //       !formData[field.name] ||
+  //       (Array.isArray(formData[field.name]) &&
+  //         formData[field.name].length === 0)
+  //     ) {
+  //       missingFields.push(field.label);
+  //     }
+  //   });
+
+  //   if (missingFields.length > 0) {
+  //     const missingFieldsList = missingFields.join(", ");
+  //     setModalMessage(
+  //       `Please fill in the following fields: ${missingFieldsList}`
+  //     );
+  //     setIsModalOpen(true);
+  //     setIsLoading(false);
+  //     return;
+  //   }
+
+  //   try {
+  //     await addDoc(collection(db, "registrations"), formData);
+  //     dispatch(resetForm());
+  //     setModalMessage(`Registration completed!`);
+  //     setIsModalOpen(true);
+  //     setIsLoading(false);
+  //     setSubmissionSuccess(true);
+  //   } catch (error) {
+  //     console.error("Error adding document: ", error);
+  //     setModalMessage("Something went wrong while submitting the form.");
+  //     setIsModalOpen(true);
+  //     setIsLoading(false);
+  //     setSubmissionSuccess(false);
+  //   }
+  // };
+
   const handleSubmit = async () => {
     setIsLoading(true);
     const missingFields: string[] = [];
@@ -155,7 +205,6 @@ export default function RegisterPage() {
       { name: "location", label: "Location" },
       { name: "agenda", label: "Agenda" },
     ];
-
     requiredFields.forEach((field) => {
       if (
         !formData[field.name] ||
@@ -165,7 +214,6 @@ export default function RegisterPage() {
         missingFields.push(field.label);
       }
     });
-
     if (missingFields.length > 0) {
       const missingFieldsList = missingFields.join(", ");
       setModalMessage(
@@ -177,18 +225,17 @@ export default function RegisterPage() {
     }
 
     try {
-      await addDoc(collection(db, "registrations"), formData);
+      await submitForm(formData);
       dispatch(resetForm());
-      setModalMessage(`Registration completed!`);
-      setIsModalOpen(true);
-      setIsLoading(false);
+      setModalMessage("Registration completed!");
       setSubmissionSuccess(true);
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Submission error:", error);
       setModalMessage("Something went wrong while submitting the form.");
+      setSubmissionSuccess(false);
+    } finally {
       setIsModalOpen(true);
       setIsLoading(false);
-      setSubmissionSuccess(false);
     }
   };
 
