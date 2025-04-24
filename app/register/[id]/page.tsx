@@ -4,17 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { resetForm, updateForm } from "../../../store/formSlice";
 import styles from "./Register.module.css";
-import { useState } from "react";
-// import { db } from "@/app/firebase/firebaseConfig";
-// import { collection, addDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import { TextField, Button, Typography } from "@mui/material";
-import { submitForm } from "../../../lib/api";
+import { getForms, submitForm } from "../../../lib/api";
 
 export default function RegisterPage() {
   const { id } = useParams();
   const router = useRouter();
-
   if (Number(id) < 1 || Number(id) > 3 || isNaN(Number(id))) {
     notFound();
   }
@@ -35,6 +32,34 @@ export default function RegisterPage() {
   const [modalMessage, setModalMessage] = useState("");
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [agendaOptions, setAgendaOptions] = useState<
+    { id: string; title: string }[]
+  >([]);
+
+  useEffect(() => {
+    if (formSubmitted) return;
+    const isformOneValid =
+      formData.name &&
+      formData.email &&
+      formData.phone &&
+      formData.company &&
+      formData.role &&
+      formData.location;
+
+    const isformTwoValid = formData.agenda && formData.agenda.length > 0;
+
+    if (id === "2" && !isformOneValid) {
+      router.push("/register/1");
+    }
+    if (id === "3") {
+      if (!isformOneValid) {
+        router.push("/register/1");
+      } else if (!isformTwoValid) {
+        router.push("/register/2");
+      }
+    }
+  }, [id, formData, router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -114,25 +139,18 @@ export default function RegisterPage() {
     }
   };
 
-  const agendaOptions = [
-    { id: "frontend", title: "Frontend Development" },
-    { id: "backend", title: "Backend Development" },
-    { id: "devops", title: "DevOps & Deployment" },
-    { id: "design", title: "UI/UX Design" },
-    { id: "ai", title: "Artificial Intelligence" },
-    { id: "cloud", title: "Cloud Computing" },
-    { id: "web3", title: "Web3 & Blockchain" },
-    { id: "iot", title: "Internet of Things" },
-    { id: "cybersecurity", title: "Cybersecurity" },
-    { id: "mlops", title: "MLOps" },
-    { id: "robotics", title: "Robotics" },
-    { id: "quantum", title: "Quantum Computing" },
-    { id: "arvr", title: "AR/VR & Mixed Reality" },
-    { id: "sustainability", title: "Tech for Sustainability" },
-    { id: "mobile", title: "Mobile Development" },
-    { id: "data", title: "Data Science & Analytics" },
-    { id: "leadership", title: "Leadership & Innovation" },
-  ];
+  useEffect(() => {
+    const fetchAgendaOptions = async () => {
+      try {
+        const options = await getForms();
+        setAgendaOptions(options);
+      } catch (error) {
+        console.error("Failed to load agenda options", error);
+      }
+    };
+
+    fetchAgendaOptions();
+  }, []);
 
   const toggleAgenda = (id: string) => {
     const alreadySelected = agenda.includes(id);
@@ -143,55 +161,6 @@ export default function RegisterPage() {
     dispatch(updateForm({ agenda: updatedAgenda }));
     setError((prev) => ({ ...prev, agenda: "" }));
   };
-
-  // const handleSubmit = async () => {
-  //   setIsLoading(true);
-  //   const missingFields: string[] = [];
-  //   const requiredFields: { name: keyof typeof formData; label: string }[] = [
-  //     { name: "name", label: "Name" },
-  //     { name: "email", label: "Email" },
-  //     { name: "phone", label: "Phone Number" },
-  //     { name: "company", label: "Company" },
-  //     { name: "role", label: "Role" },
-  //     { name: "location", label: "Location" },
-  //     { name: "agenda", label: "Agenda" },
-  //   ];
-
-  //   requiredFields.forEach((field) => {
-  //     if (
-  //       !formData[field.name] ||
-  //       (Array.isArray(formData[field.name]) &&
-  //         formData[field.name].length === 0)
-  //     ) {
-  //       missingFields.push(field.label);
-  //     }
-  //   });
-
-  //   if (missingFields.length > 0) {
-  //     const missingFieldsList = missingFields.join(", ");
-  //     setModalMessage(
-  //       `Please fill in the following fields: ${missingFieldsList}`
-  //     );
-  //     setIsModalOpen(true);
-  //     setIsLoading(false);
-  //     return;
-  //   }
-
-  //   try {
-  //     await addDoc(collection(db, "registrations"), formData);
-  //     dispatch(resetForm());
-  //     setModalMessage(`Registration completed!`);
-  //     setIsModalOpen(true);
-  //     setIsLoading(false);
-  //     setSubmissionSuccess(true);
-  //   } catch (error) {
-  //     console.error("Error adding document: ", error);
-  //     setModalMessage("Something went wrong while submitting the form.");
-  //     setIsModalOpen(true);
-  //     setIsLoading(false);
-  //     setSubmissionSuccess(false);
-  //   }
-  // };
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -228,6 +197,7 @@ export default function RegisterPage() {
       await submitForm(formData);
       dispatch(resetForm());
       setModalMessage("Registration completed!");
+      setFormSubmitted(true);
       setSubmissionSuccess(true);
     } catch (error) {
       console.error("Submission error:", error);
@@ -238,30 +208,6 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
-
-  // const handleSubmit = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const res = await fetch("/api/post", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(formData),
-  //     });
-  //     if (!res.ok) throw new Error("API request failed");
-  //     const data = await res.json();
-  //     console.log("Response:", data);
-  //     dispatch(resetForm());
-  //     setModalMessage("Form successfully submitted to API!");
-  //     setSubmissionSuccess(true);
-  //   } catch (error) {
-  //     console.error("API error:", error);
-  //     setModalMessage("Something went wrong while submitting to API.");
-  //     setSubmissionSuccess(false);
-  //   } finally {
-  //     setIsModalOpen(true);
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const handleModalClose = () => {
     setIsModalOpen(false);

@@ -10,3 +10,8 @@ export const submitForm = async (data: any) => {
   const response = await api.post("/forms", data);
   return response.data;
 };
+
+export const getForms = async () => {
+  const response = await api.get("/agenda");
+  return response.data;
+};
