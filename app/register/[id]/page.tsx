@@ -366,7 +366,7 @@ export default function RegisterPage() {
                 <Typography variant="inherit" gutterBottom>
                   <strong>Agenda:</strong>
                   {formData.agenda
-                    .map((id) => {
+                    .map((id: string) => {
                       const match = agendaOptions.find(
                         (item) => item.id === id
                       );
