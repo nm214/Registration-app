@@ -6,19 +6,25 @@ import { resetForm, updateForm } from "../../../store/formSlice";
 import styles from "./Register.module.css";
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
-import { TextField, Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { getForms, submitForm } from "../../../lib/api";
+import React from "react";
+import FormOne from "./formOne";
+import FormTwo from "./formTwo";
+import FormThree from "./formThree";
+import FormFour from "./formFour";
 
 export default function RegisterPage() {
   const { id } = useParams();
   const router = useRouter();
-  if (Number(id) < 1 || Number(id) > 3 || isNaN(Number(id))) {
+  if (Number(id) < 1 || Number(id) > 4 || isNaN(Number(id))) {
     notFound();
   }
 
   const formData = useSelector((state: RootState) => state.form);
   const dispatch = useDispatch();
   const agenda = useSelector((state: any) => state.form.agenda);
+  const gender = useSelector((state: any) => state.form.gender);
   const [error, setError] = useState({
     name: "",
     email: "",
@@ -27,6 +33,7 @@ export default function RegisterPage() {
     role: "",
     location: "",
     agenda: "",
+    gender: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -36,6 +43,19 @@ export default function RegisterPage() {
   const [agendaOptions, setAgendaOptions] = useState<
     { id: string; title: string }[]
   >([]);
+  const [formOneValid, setFormOneValid] = useState(false);
+
+  useEffect(() => {
+    const isformOneValid =
+      formData.name &&
+      formData.email &&
+      formData.phone &&
+      formData.company &&
+      formData.role &&
+      formData.location;
+
+    setFormOneValid(isformOneValid as unknown as boolean);
+  }, [id, formData, router]);
 
   useEffect(() => {
     if (formSubmitted) return;
@@ -49,6 +69,8 @@ export default function RegisterPage() {
 
     const isformTwoValid = formData.agenda && formData.agenda.length > 0;
 
+    const isformThreeValid = formData.gender;
+
     if (id === "2" && !isformOneValid) {
       router.push("/register/1");
     }
@@ -57,6 +79,15 @@ export default function RegisterPage() {
         router.push("/register/1");
       } else if (!isformTwoValid) {
         router.push("/register/2");
+      }
+    }
+    if (id === "4") {
+      if (!isformOneValid) {
+        router.push("/register/1");
+      } else if (!isformTwoValid) {
+        router.push("/register/2");
+      } else if (!isformThreeValid) {
+        router.push("/register/3");
       }
     }
   }, [id, formData, router]);
@@ -69,6 +100,11 @@ export default function RegisterPage() {
     setError((prev) => ({ ...prev, [name]: "" }));
   };
 
+  const onChangeRadioButton = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateForm({ gender: e.target.value }));
+    setError((prev) => ({ ...prev, gender: "" }));
+  };
+
   const handleNext = () => {
     if (id === "1") {
       let newErrors = {
@@ -79,6 +115,7 @@ export default function RegisterPage() {
         role: "",
         location: "",
         agenda: "",
+        gender: "",
       };
       let isValid = true;
 
@@ -126,8 +163,25 @@ export default function RegisterPage() {
           agenda: "Please select at least one agenda item.",
         }));
         return;
+      } else {
+        if (formData.agenda.length > 2) {
+          setError((prev) => ({
+            ...prev,
+            agenda: "Only 2 can be selected",
+          }));
+          return;
+        }
       }
       router.push("/register/3");
+    } else if (id === "3") {
+      if (!formData.gender) {
+        setError((prev) => ({
+          ...prev,
+          gender: "Please select the gender.",
+        }));
+        return;
+      }
+      router.push("/register/4");
     }
   };
 
@@ -136,6 +190,8 @@ export default function RegisterPage() {
       router.push("/register/1");
     } else if (id === "3") {
       router.push("/register/2");
+    } else if (id === "4") {
+      router.push("/register/3");
     }
   };
 
@@ -173,6 +229,7 @@ export default function RegisterPage() {
       { name: "role", label: "Role" },
       { name: "location", label: "Location" },
       { name: "agenda", label: "Agenda" },
+      { name: "gender", label: "Gender" },
     ];
     requiredFields.forEach((field) => {
       if (
@@ -222,181 +279,38 @@ export default function RegisterPage() {
       <form>
         <div className={styles.formSection}>
           {id === "1" && (
-            <>
-              <TextField
-                label="Name"
-                variant="outlined"
-                fullWidth
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                error={!!error.name}
-                helperText={error.name}
-                margin="normal"
-              />
-
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                error={!!error.email}
-                helperText={error.email}
-                margin="normal"
-              />
-
-              <TextField
-                label="Phone Number"
-                variant="outlined"
-                fullWidth
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                error={!!error.phone}
-                helperText={error.phone}
-                margin="normal"
-              />
-
-              <TextField
-                label="Company"
-                variant="outlined"
-                fullWidth
-                id="company"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                error={!!error.company}
-                helperText={error.company}
-                margin="normal"
-              />
-
-              <TextField
-                label="Role"
-                variant="outlined"
-                fullWidth
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                error={!!error.role}
-                helperText={error.role}
-                margin="normal"
-              />
-
-              <TextField
-                label="Location"
-                variant="outlined"
-                fullWidth
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                error={!!error.location}
-                helperText={error.location}
-                margin="normal"
-              />
-            </>
+            <FormOne
+              formData={formData}
+              handleChange={handleChange}
+              error={error}
+            />
           )}
 
           {id === "2" && (
-            <>
-              <Typography className={styles.label}>
-                Select Agenda Items:
-              </Typography>
-
-              <div className={styles.agendaGrid}>
-                {agendaOptions.map((item) => (
-                  <Button
-                    className={styles.agendaButton}
-                    key={item.id}
-                    variant={
-                      agenda.includes(item.id) ? "contained" : "outlined"
-                    }
-                    color={agenda.includes(item.id) ? "primary" : "info"}
-                    onClick={() => toggleAgenda(item.id)}
-                  >
-                    {item.title}
-                  </Button>
-                ))}
-              </div>
-              {error.agenda && (
-                <Typography variant="body2" color="error">
-                  {error.agenda}
-                </Typography>
-              )}
-            </>
+            <FormTwo
+              agendaOptions={agendaOptions}
+              toggleAgenda={toggleAgenda}
+              error={error}
+              agenda={agenda}
+            />
           )}
 
           {id === "3" && (
-            <div className={styles.summaryBox}>
-              <Typography
-                variant="h5"
-                fontSize={"1.25rem"}
-                fontWeight={"800"}
-                color="#222"
-                className={styles.summaryTitle}
-              >
-                Review Your Info:
-              </Typography>
-              <div className={styles.infoBox}>
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Name:</strong> {formData.name}
-                </Typography>
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Email:</strong> {formData.email}
-                </Typography>
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Phone Number:</strong> {formData.phone}
-                </Typography>
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Company:</strong> {formData.company}
-                </Typography>
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Role:</strong> {formData.role}
-                </Typography>
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Location:</strong> {formData.location}
-                </Typography>
+            <FormThree
+              onChangeRadioButton={onChangeRadioButton}
+              error={error}
+              gender={gender}
+            />
+          )}
 
-                <Typography variant="inherit" gutterBottom>
-                  <strong>Agenda:</strong>
-                  {formData.agenda
-                    .map((id: string) => {
-                      const match = agendaOptions.find(
-                        (item) => item.id === id
-                      );
-                      return match ? match.title : id;
-                    })
-                    .join(", ")}
-                </Typography>
-                <TextField
-                  label="What are you hoping to learn?:"
-                  name="summary"
-                  value={formData.summary}
-                  variant="outlined"
-                  fullWidth
-                  id="summary"
-                  onChange={handleChange}
-                  margin="normal"
-                  multiline
-                  rows={4}
-                  className={styles.summary}
-                />
-              </div>
-              <Button
-                color="primary"
-                variant="contained"
-                className={styles.submitButton}
-                onClick={handleSubmit}
-              >
-                {isLoading ? "Submitting..." : "Submit"}
-              </Button>
-            </div>
+          {id === "4" && (
+            <FormFour
+              handleChange={handleChange}
+              agendaOptions={agendaOptions}
+              formData={formData}
+              handleSubmit={handleSubmit}
+              isLoading={isLoading}
+            />
           )}
         </div>
 
@@ -411,12 +325,19 @@ export default function RegisterPage() {
               Previous
             </Button>
           )}
-          {id !== "3" && (
+          {id !== "4" && (
             <Button
               color="primary"
               variant="contained"
               className={styles.button}
               onClick={handleNext}
+              disabled={
+                id === "1"
+                  ? !formOneValid
+                  : id === "2"
+                  ? formData.agenda.length === 0
+                  : !formData.gender
+              }
             >
               Next
             </Button>

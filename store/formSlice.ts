@@ -9,6 +9,7 @@ interface FormState {
   location: string;
   agenda: string[];
   summary: string;
+  gender: string;
 }
 
 const initialState: FormState = {
@@ -20,6 +21,7 @@ const initialState: FormState = {
   location: "",
   agenda: [],
   summary: "",
+  gender: "",
 };
 
 export const formSlice = createSlice({
