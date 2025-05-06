@@ -20,7 +20,6 @@ export default function RegisterPage() {
   if (Number(id) < 1 || Number(id) > 4 || isNaN(Number(id))) {
     notFound();
   }
-
   const formData = useSelector((state: RootState) => state.form);
   const dispatch = useDispatch();
   const agenda = useSelector((state: any) => state.form.agenda);
@@ -44,7 +43,6 @@ export default function RegisterPage() {
     { id: string; title: string }[]
   >([]);
   const [formOneValid, setFormOneValid] = useState(false);
-
   useEffect(() => {
     const isformOneValid =
       formData.name &&
@@ -56,7 +54,6 @@ export default function RegisterPage() {
 
     setFormOneValid(isformOneValid as unknown as boolean);
   }, [id, formData, router]);
-
   useEffect(() => {
     if (formSubmitted) return;
     const isformOneValid =
@@ -91,7 +88,6 @@ export default function RegisterPage() {
       }
     }
   }, [id, formData, router]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

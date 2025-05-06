@@ -16,6 +16,15 @@ const FormFour: React.FC<formFourProps> = ({
   handleSubmit,
   isLoading,
 }) => {
+  const requiredFields = [
+    { name: "name", label: "Name" },
+    { name: "email", label: "Email" },
+    { name: "phone", label: "Phone Number" },
+    { name: "company", label: "Company" },
+    { name: "role", label: "Role" },
+    { name: "location", label: "Location" },
+    { name: "gender", label: "Gender" },
+  ];
   return (
     <div className={styles.summaryBox}>
       <Typography
@@ -28,24 +37,11 @@ const FormFour: React.FC<formFourProps> = ({
         Review Your Info:
       </Typography>
       <div className={styles.infoBox}>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Name:</strong> {formData.name}
-        </Typography>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Email:</strong> {formData.email}
-        </Typography>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Phone Number:</strong> {formData.phone}
-        </Typography>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Company:</strong> {formData.company}
-        </Typography>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Role:</strong> {formData.role}
-        </Typography>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Location:</strong> {formData.location}
-        </Typography>
+        {requiredFields.map((field) => (
+          <Typography key={field.name} variant="inherit" gutterBottom>
+            <strong>{field.label}:</strong> {formData[field.name]}
+          </Typography>
+        ))}
 
         <Typography variant="inherit" gutterBottom>
           <strong>Agenda:</strong>
@@ -57,9 +53,6 @@ const FormFour: React.FC<formFourProps> = ({
               return match ? match.title : id;
             })
             .join(", ")}
-        </Typography>
-        <Typography variant="inherit" gutterBottom>
-          <strong>Gender:</strong> {formData.gender}
         </Typography>
         <TextField
           label="What are you hoping to learn?:"

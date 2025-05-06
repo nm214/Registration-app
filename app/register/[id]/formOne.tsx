@@ -7,85 +7,31 @@ interface formOneProps {
 }
 
 const FormOne: React.FC<formOneProps> = ({ formData, handleChange, error }) => {
+  const requiredFields = [
+    { name: "name", label: "Name" },
+    { name: "email", label: "Email" },
+    { name: "phone", label: "Phone Number" },
+    { name: "company", label: "Company" },
+    { name: "role", label: "Role" },
+    { name: "location", label: "Location" },
+  ];
   return (
     <>
-      <TextField
-        label="Name"
-        variant="outlined"
-        fullWidth
-        id="name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        error={!!error.name}
-        helperText={error.name}
-        margin="normal"
-      />
-
-      <TextField
-        label="Email"
-        variant="outlined"
-        fullWidth
-        id="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        error={!!error.email}
-        helperText={error.email}
-        margin="normal"
-      />
-
-      <TextField
-        label="Phone Number"
-        variant="outlined"
-        fullWidth
-        id="phone"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        error={!!error.phone}
-        helperText={error.phone}
-        margin="normal"
-      />
-
-      <TextField
-        label="Company"
-        variant="outlined"
-        fullWidth
-        id="company"
-        name="company"
-        value={formData.company}
-        onChange={handleChange}
-        error={!!error.company}
-        helperText={error.company}
-        margin="normal"
-      />
-
-      <TextField
-        label="Role"
-        variant="outlined"
-        fullWidth
-        id="role"
-        name="role"
-        value={formData.role}
-        onChange={handleChange}
-        error={!!error.role}
-        helperText={error.role}
-        margin="normal"
-      />
-
-      <TextField
-        label="Location"
-        variant="outlined"
-        fullWidth
-        id="location"
-        name="location"
-        value={formData.location}
-        onChange={handleChange}
-        error={!!error.location}
-        helperText={error.location}
-        margin="normal"
-      />
+      {requiredFields.map((field) => (
+        <TextField
+          key={field.name}
+          label={field.label}
+          variant="outlined"
+          fullWidth
+          id={field.name}
+          name={field.name}
+          value={formData[field.name]}
+          onChange={handleChange}
+          error={!!error[field.name]}
+          helperText={error[field.name]}
+          margin="normal"
+        />
+      ))}
     </>
   );
 };
