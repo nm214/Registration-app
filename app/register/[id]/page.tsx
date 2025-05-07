@@ -7,7 +7,6 @@ import styles from "./Register.module.css";
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import { Button } from "@mui/material";
-import { getForms, submitForm } from "../../../lib/api";
 import React from "react";
 import FormOne from "./formOne";
 import FormTwo from "./formTwo";
@@ -194,8 +193,9 @@ export default function RegisterPage() {
   useEffect(() => {
     const fetchAgendaOptions = async () => {
       try {
-        const options = await getForms();
-        setAgendaOptions(options);
+        const response = await fetch("/api/forms");
+        const data = await response.json();
+        setAgendaOptions(data);
       } catch (error) {
         console.error("Failed to load agenda options", error);
       }
@@ -247,7 +247,14 @@ export default function RegisterPage() {
     }
 
     try {
-      await submitForm(formData);
+      await fetch("/api/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
       dispatch(resetForm());
       setModalMessage("Registration completed!");
       setFormSubmitted(true);
