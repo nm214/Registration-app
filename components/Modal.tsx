@@ -1,11 +1,7 @@
 import React from "react";
 import styles from "./Modal.module.css";
 import { Button, Typography } from "@mui/material";
-
-interface ModalProps {
-  message: string;
-  onClose: () => void;
-}
+import { ModalProps } from "@/app/types/formTypes";
 
 const Modal: React.FC<ModalProps> = ({ message, onClose }) => {
   return (

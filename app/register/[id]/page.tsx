@@ -19,11 +19,8 @@ export default function RegisterPage() {
   if (Number(id) < 1 || Number(id) > 4 || isNaN(Number(id))) {
     notFound();
   }
-  const formData = useSelector((state: RootState) => state.form);
-  const dispatch = useDispatch();
-  const agenda = useSelector((state: any) => state.form.agenda);
-  const gender = useSelector((state: any) => state.form.gender);
-  const [error, setError] = useState({
+
+  const defaultErrorState = {
     name: "",
     email: "",
     phone: "",
@@ -32,7 +29,12 @@ export default function RegisterPage() {
     location: "",
     agenda: "",
     gender: "",
-  });
+  };
+
+  const formData = useSelector((state: RootState) => state.form);
+  const dispatch = useDispatch();
+  const { agenda, gender } = useSelector((state: RootState) => state.form);
+  const [error, setError] = useState(defaultErrorState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
@@ -42,43 +44,36 @@ export default function RegisterPage() {
     { id: string; title: string }[]
   >([]);
   const [formOneValid, setFormOneValid] = useState(false);
-  useEffect(() => {
-    const isformOneValid =
-      formData.name &&
-      formData.email &&
-      formData.phone &&
-      formData.company &&
-      formData.role &&
-      formData.location;
 
-    setFormOneValid(isformOneValid as unknown as boolean);
-  }, [id, formData, router]);
+  const isformOneValid = () =>
+    formData.name &&
+    formData.email &&
+    formData.phone &&
+    formData.company &&
+    formData.role &&
+    formData.location;
+
+  useEffect(() => {
+    setFormOneValid(!!isformOneValid());
+  }, [id, formData]);
   useEffect(() => {
     if (formSubmitted) return;
-    const isformOneValid =
-      formData.name &&
-      formData.email &&
-      formData.phone &&
-      formData.company &&
-      formData.role &&
-      formData.location;
-
     const isformTwoValid = formData.agenda && formData.agenda.length > 0;
 
     const isformThreeValid = formData.gender;
 
-    if (id === "2" && !isformOneValid) {
+    if (id === "2" && !isformOneValid()) {
       router.push("/register/1");
     }
     if (id === "3") {
-      if (!isformOneValid) {
+      if (!isformOneValid()) {
         router.push("/register/1");
       } else if (!isformTwoValid) {
         router.push("/register/2");
       }
     }
     if (id === "4") {
-      if (!isformOneValid) {
+      if (!isformOneValid()) {
         router.push("/register/1");
       } else if (!isformTwoValid) {
         router.push("/register/2");
@@ -102,16 +97,7 @@ export default function RegisterPage() {
 
   const handleNext = () => {
     if (id === "1") {
-      let newErrors = {
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        role: "",
-        location: "",
-        agenda: "",
-        gender: "",
-      };
+      let newErrors = { ...defaultErrorState };
       let isValid = true;
 
       if (!formData.name.trim()) {
@@ -181,13 +167,8 @@ export default function RegisterPage() {
   };
 
   const handlePrevious = () => {
-    if (id === "2") {
-      router.push("/register/1");
-    } else if (id === "3") {
-      router.push("/register/2");
-    } else if (id === "4") {
-      router.push("/register/3");
-    }
+    const prevStep = Math.max(Number(id) - 1, 1);
+    router.push(`/register/${prevStep}`);
   };
 
   useEffect(() => {

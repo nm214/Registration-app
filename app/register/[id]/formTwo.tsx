@@ -1,14 +1,8 @@
 import { Button, Typography } from "@mui/material";
 import styles from "./Register.module.css";
+import { FormTwoProps } from "@/app/types/formTypes";
 
-interface formTwoProps {
-  agendaOptions: any;
-  toggleAgenda: any;
-  error: any;
-  agenda: any;
-}
-
-const FormTwo: React.FC<formTwoProps> = ({
+const FormTwo: React.FC<FormTwoProps> = ({
   agendaOptions,
   toggleAgenda,
   error,
@@ -19,7 +13,7 @@ const FormTwo: React.FC<formTwoProps> = ({
       <Typography className={styles.label}>Select Agenda Items:</Typography>
 
       <div className={styles.agendaGrid}>
-        {agendaOptions.map((item: any) => (
+        {agendaOptions.map((item) => (
           <Button
             className={styles.agendaButton}
             key={item.id}

@@ -1,13 +1,6 @@
 import { Button, TextField, Typography } from "@mui/material";
 import styles from "./Register.module.css";
-
-interface formFourProps {
-  handleChange: any;
-  agendaOptions: any;
-  formData: any;
-  handleSubmit: any;
-  isLoading: any;
-}
+import { formFourProps, FormState } from "@/app/types/formTypes";
 
 const FormFour: React.FC<formFourProps> = ({
   handleChange,
@@ -39,7 +32,8 @@ const FormFour: React.FC<formFourProps> = ({
       <div className={styles.infoBox}>
         {requiredFields.map((field) => (
           <Typography key={field.name} variant="inherit" gutterBottom>
-            <strong>{field.label}:</strong> {formData[field.name]}
+            <strong>{field.label}:</strong>
+            {formData[field.name as keyof FormState]}
           </Typography>
         ))}
 

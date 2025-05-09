@@ -1,10 +1,5 @@
+import { formOneProps, FormState, Error } from "@/app/types/formTypes";
 import { TextField } from "@mui/material";
-
-interface formOneProps {
-  formData: any;
-  handleChange: any;
-  error: any;
-}
 
 const FormOne: React.FC<formOneProps> = ({ formData, handleChange, error }) => {
   const requiredFields = [
@@ -25,10 +20,10 @@ const FormOne: React.FC<formOneProps> = ({ formData, handleChange, error }) => {
           fullWidth
           id={field.name}
           name={field.name}
-          value={formData[field.name]}
+          value={formData[field.name as keyof FormState]}
           onChange={handleChange}
-          error={!!error[field.name]}
-          helperText={error[field.name]}
+          error={!!error[field.name as keyof Error]}
+          helperText={error[field.name as keyof Error]}
           margin="normal"
         />
       ))}

@@ -1,16 +1,5 @@
+import { FormState } from "@/app/types/formTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface FormState {
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  role: string;
-  location: string;
-  agenda: string[];
-  summary: string;
-  gender: string;
-}
 
 const initialState: FormState = {
   name: "",

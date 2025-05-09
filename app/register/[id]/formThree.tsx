@@ -1,11 +1,6 @@
 import { Radio, Typography } from "@mui/material";
 import styles from "./Register.module.css";
-
-interface formThreeProps {
-  onChangeRadioButton: any;
-  error: any;
-  gender: any;
-}
+import { formThreeProps } from "@/app/types/formTypes";
 
 const FormThree: React.FC<formThreeProps> = ({
   onChangeRadioButton,
