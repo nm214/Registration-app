@@ -118,14 +118,26 @@
   gap: 1rem;
 }
 
-.radio{
+.radio {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.radioLabel{
+.radioLabel {
   display: flex;
+}
+
+.progressBar {
+  padding: 0.3rem;
+  border-radius: 1rem;
+  width: 100%; 
+  margin-right: 0.5rem; 
+}
+
+.progressBarAlignment {
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 600px) {

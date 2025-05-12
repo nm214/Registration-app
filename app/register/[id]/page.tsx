@@ -12,6 +12,7 @@ import FormOne from "./formOne";
 import FormTwo from "./formTwo";
 import FormThree from "./formThree";
 import FormFour from "./formFour";
+import Progress from "./progress";
 
 export default function RegisterPage() {
   const { id } = useParams();
@@ -259,6 +260,7 @@ export default function RegisterPage() {
 
   return (
     <div className={styles.formContainer}>
+      <Progress formData={formData} />
       <h1 className={styles.title}>Registration Step {id}</h1>
       <form>
         <div className={styles.formSection}>

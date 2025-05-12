@@ -63,3 +63,7 @@ export interface ModalProps {
   message: string;
   onClose: () => void;
 }
+
+export interface progressProps {
+  formData: FormState;
+}
