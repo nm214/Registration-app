@@ -46,6 +46,34 @@ export default function RegisterPage() {
   >([]);
   const [formOneValid, setFormOneValid] = useState(false);
 
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("formStartTime");
+    if (stored) {
+      const parsed = parseInt(stored);
+      if (!isNaN(parsed)) {
+        setStartTime(parsed);
+        setElapsedTime(Math.floor((Date.now() - parsed) / 1000));
+      }
+    } else {
+      const newStart = Date.now();
+      localStorage.setItem("formStartTime", newStart.toString());
+      setStartTime(newStart);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!startTime) return;
+
+    const interval = setInterval(() => {
+      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime]);
+
   const isformOneValid = () =>
     formData.name &&
     formData.email &&
@@ -196,6 +224,12 @@ export default function RegisterPage() {
     setError((prev) => ({ ...prev, agenda: "" }));
   };
 
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}m ${secs}s`;
+  };
+
   const handleSubmit = async () => {
     setIsLoading(true);
     const missingFields: string[] = [];
@@ -238,7 +272,12 @@ export default function RegisterPage() {
       });
 
       dispatch(resetForm());
-      setModalMessage("Registration completed!");
+      localStorage.removeItem("formStartTime");
+
+      setModalMessage(
+        `Registration completed! Time spent: ${formatTime(elapsedTime)}`
+      );
+
       setFormSubmitted(true);
       setSubmissionSuccess(true);
     } catch (error) {
